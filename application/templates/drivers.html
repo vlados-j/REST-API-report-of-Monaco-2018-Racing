@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<a class="btn btn-primary" href="{{url_for('report_f1.drivers')}}" role="button">Asc</a>
+<a class="btn btn-primary" href="{{url_for('report_f1.drivers', order='desc')}}" role="button">Desc</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for racer in prepared_info_for_report %}
+    <tr>
+      <th scope="row">{{ racer.place }}</th>
+      <td>{{ racer.name }}</td>
+      <td><a href="{{url_for('report_f1.drivers', abbreviation=racer.abbreviation)}}">Details</a></td>
+    </tr>
+    {% if order == 'desc' and (racer.place == 1 or racer.place == 16) %}
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    {% elif order != 'desc' and racer.place == 15 %}
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
