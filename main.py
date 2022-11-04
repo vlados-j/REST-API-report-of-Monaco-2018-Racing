@@ -2,14 +2,34 @@ from flask import Flask, request, jsonify, Response
 from flask_restful import Api, Resource
 from application_vlados import processing_data, build_report
 from dict2xml import dict2xml
+from flasgger import Swagger
 
 
 app = Flask(__name__)
 api = Api(app)
+swagger = Swagger(app)
 
 
 class Report(Resource):
     def get(self):
+        """
+        Example endpoint returning report with the F1 racers.
+        ---
+        parameters:
+          - name: order
+            in: query
+            type: string
+            required: false
+            description: ordering for racers in report
+          - name: format
+            in: query
+            type: string
+            required: false
+            description: format of data (xml or json)
+        responses:
+          200:
+            description: Racers report
+        """
         args = request.args
         structured_info = processing_data('files/start.log', 'files/end.log',
                                           'files/abbreviations.txt')
@@ -19,6 +39,29 @@ class Report(Resource):
 
 class Drivers(Resource):
     def get(self):
+        """
+        Example endpoint returning report with the F1 racers with a possibility to execute data about particular racer
+        ---
+        parameters:
+          - name: order
+            in: query
+            type: string
+            required: false
+            description: ordering for racers in report
+          - name: format
+            in: query
+            type: string
+            required: false
+            description: format of data (xml or json)
+          - name: abbreviation
+            in: query
+            type: string
+            required: false
+            description: abbreviation of the racer (SVF for example)
+        responses:
+          200:
+            description: Racers report
+        """
         args = request.args
         structured_info = processing_data('files/start.log', 'files/end.log',
                                           'files/abbreviations.txt')
